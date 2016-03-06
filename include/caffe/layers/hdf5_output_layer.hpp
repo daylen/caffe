@@ -35,8 +35,7 @@ class HDF5OutputLayer : public Layer<Dtype> {
       const vector<Blob<Dtype>*>& top) {}
 
   virtual inline const char* type() const { return "HDF5Output"; }
-  // TODO: no limit on the number of blobs
-  virtual inline int ExactNumBottomBlobs() const { return 2; }
+  virtual inline int MinBottomBlobs() const { return 1; }
   virtual inline int ExactNumTopBlobs() const { return 0; }
 
   inline std::string file_name() const { return file_name_; }
@@ -50,13 +49,13 @@ class HDF5OutputLayer : public Layer<Dtype> {
       const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
   virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
       const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void SaveBlobs();
 
   bool file_opened_;
   std::string file_name_;
   hid_t file_id_;
   Blob<Dtype> data_blob_;
   Blob<Dtype> label_blob_;
+  int current_batch_;
 };
 
 }  // namespace caffe
